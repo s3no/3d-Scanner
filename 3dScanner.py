@@ -38,6 +38,6 @@ def spinMotor():
     GPIO.cleanup()
 
 #only does 8 photos at one angle. Need to build arm to get more photos at other angles
-for x in range(8):
+for x in range(9):
     spinMotor()
     takePhoto()
