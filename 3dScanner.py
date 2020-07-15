@@ -4,6 +4,9 @@ import time
 
 imgCount = 1
 camera = PiCamera()
+bedControlPins = [7,11,13,15]
+cameraControlPins = [12,16,18,22]
+smallTurn = 
 
 def takePhoto():
     global imgCount
@@ -14,9 +17,9 @@ def takePhoto():
     camera.stop_preview()
     imgCount += 1
 
-def spinMotor():
+def spinMotor(motorSelect):
     GPIO.setmode(GPIO.BOARD)
-    control_pins = [7,11,13,15]
+    control_pins = motorSelect
     for pin in control_pins:
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, 0)
@@ -39,5 +42,10 @@ def spinMotor():
 
 #only does 8 photos at one angle. Need to build arm to get more photos at other angles
 for x in range(9):
-    spinMotor()
+    spinMotor(bedControlPins)
     takePhoto()
+    
+#Add change camera angle then re-run above loop
+for x in range(30):    
+    spinMotor(cameraControlPins)
+
