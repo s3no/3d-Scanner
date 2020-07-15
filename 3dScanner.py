@@ -2,6 +2,9 @@ import RPi.GPIO as GPIO
 from picamera import PiCamera
 import time
 
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
 imgCount = 1
 camera = PiCamera()
 bedControlPins = [7,11,13,15]
@@ -32,7 +35,7 @@ def takePhoto():
     global imgCount
 
     camera.start_preview()
-    time.sleep(3)
+    time.sleep(2)
     camera.capture("tmpImages/image" + str(imgCount) + ".jpg")
     camera.stop_preview()
     imgCount += 1
@@ -51,14 +54,20 @@ def spinMotor(motorSelect,direction):
             time.sleep(0.001)
     GPIO.cleanup()
 
+def runMain():
+    #only does 8 photos at one angle. Need to build arm to get more photos at other angles
+    for x in range(9):
+        spinMotor(bedControlPins,leftTurnSequence)
+        takePhoto()   
+    #Add change camera angle then re-run above loop
+    for x in range(20):    
+        spinMotor(cameraControlPins,leftTurnSequence)
+    #now Go Back
+    for x in range(20):    
+        spinMotor(cameraControlPins,rightTurnSequence)
 
-#only does 8 photos at one angle. Need to build arm to get more photos at other angles
-for x in range(9):
-    spinMotor(bedControlPins,leftTurnSequence)
-    takePhoto()   
-#Add change camera angle then re-run above loop
-for x in range(20):    
-    spinMotor(cameraControlPins,leftTurnSequence)
-#now Go Back
-for x in range(20):    
-    spinMotor(cameraControlPins,rightTurnSequence)
+while True:
+    if GPIO.input(37) == GPIO.HIGH:
+        runMain()
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
