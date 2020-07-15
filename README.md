@@ -6,7 +6,7 @@
                           GPIO 11 => in2,
                           GPIO 13 => in3, 
                           GPIO 15 => in4 
-                          
+                           
 - Camera Motor Pinout: GPIO 12 => in1, 
                       GPIO 16 => in2,
                       GPIO 18 => in3, 
@@ -14,5 +14,5 @@
                       
 - Button is plain old: 3.3v => botton => resister => GPIO 37
 
-TO DO: - Make Frame
-       - Add a beeper and screen.
+TO DO: Make Frame,
+       Add a beeper and screen.
